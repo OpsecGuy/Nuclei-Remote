@@ -1,0 +1,20 @@
+[Unit]
+Description=Nuclei Remote HTTP API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=YOUR_USERNAME
+WorkingDirectory=/home/YOUR_USERNAME/nuclei-remote/server
+ExecStart=/bin/bash /home/YOUR_USERNAME/nuclei-remote/server/start.sh
+Restart=on-failure
+RestartSec=5
+KillMode=control-group
+TimeoutStopSec=10
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

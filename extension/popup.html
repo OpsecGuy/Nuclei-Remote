@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nuclei Remote</title><link rel="stylesheet" href="popup.css"></head>
+<body>
+<header><span class="mark">N</span><div><h1>Nuclei Remote</h1><p>Scanning on your server</p></div></header>
+<div id="connection-status" class="connection-status" data-state="idle" role="status" aria-live="polite">
+<span id="connection-icon" aria-hidden="true">●</span><span id="connection-label">Connection not checked</span>
+<button id="check-connection" class="secondary" type="button" aria-label="Check server connection">Check</button>
+</div>
+<details id="settings"><summary>Server connection</summary>
+<label>Server API URL<input id="server-url" type="url" placeholder="http://SERVER_IP:8765"></label>
+<label>API key<input id="token" type="password" autocomplete="off" placeholder="Key from server configuration"></label>
+<button id="save" class="secondary">Save and test connection</button>
+<p class="hint">Direct connection, no tunnel required. The key is stored locally. HTTP sends it unencrypted; use HTTPS to encrypt the connection.</p>
+</details>
+<label>Target URL<input id="target" type="url" placeholder="https://your-domain.example"></label>
+<button id="current" class="secondary">Use current tab URL</button>
+<label>Scan profile<select id="profile"><option value="cve">Known CVEs</option><option value="serious">CVEs: high and critical</option><option value="web">Standard HTTP checks</option></select></label>
+<label>Requests per second<input id="rate-limit" type="number" min="0" max="2147483647" step="1" value="5"></label>
+<p class="hint">0 = unlimited requests. This setting is remembered for future scans.</p>
+<button id="start">Start scan</button>
+<label id="history-label" hidden>Recent scans<select id="history"></select></label>
+<section aria-live="polite"><p id="message">Configure the connection to get started.</p><div id="job"></div></section>
+<div class="actions"><button id="download" class="secondary" disabled>Download results .txt</button><button id="cancel" class="danger" disabled>Stop</button></div>
+<button id="logs" class="secondary" disabled style="margin-top:8px">Show Nuclei log</button>
+<pre id="scan-log" hidden aria-label="Nuclei log"></pre>
+<pre id="preview" hidden></pre>
+<script src="popup.js"></script>
+</body></html>
