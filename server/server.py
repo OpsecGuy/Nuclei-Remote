@@ -111,11 +111,15 @@ class Controller:
         url = urlsplit(target)
         if url.scheme not in ('http', 'https') or not url.hostname or url.username is not None or url.password is not None or url.fragment:
             raise ValueError('An HTTP/HTTPS URL without credentials or a # fragment is required.')
-        if url.port not in (None, 80, 443):
-            raise ValueError('Allowed target ports: 80 and 443.')
+        try:
+            port = url.port
+        except ValueError:
+            raise ValueError('Target port must be an integer from 1 to 65535.') from None
+        if port is not None and not 1 <= port <= 65535:
+            raise ValueError('Target port must be an integer from 1 to 65535.')
         host = normalize_host(url.hostname)
         try:
-            addresses = socket.getaddrinfo(host, url.port or (443 if url.scheme == 'https' else 80), type=socket.SOCK_STREAM)
+            addresses = socket.getaddrinfo(host, port if port is not None else (443 if url.scheme == 'https' else 80), type=socket.SOCK_STREAM)
         except socket.gaierror as error:
             raise ValueError('Unable to resolve the target hostname.') from error
         if not addresses or any(not ipaddress.ip_address(item[4][0]).is_global for item in addresses):
